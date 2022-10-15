@@ -1,0 +1,540 @@
+Bài 1: Cấu trúc sinh viên
+#include <bits\stdc++.h>
+
+using namespace std;
+
+struct SinhVien{
+	int maSV;
+	string tenSV, lop, hanhKiem;
+	float diemTK;
+};
+struct Node{
+	SinhVien sv;
+	struct Node *next;
+};
+
+typedef struct Node NODE;
+struct List{
+	NODE *pHead;
+	NODE *pTail;
+};
+typedef struct List LIST;
+
+void khoiTao(LIST &ds){
+	ds.pHead = NULL;
+	ds.pTail = NULL;
+}
+Node *taoNut(SinhVien s){
+	NODE *p;
+	p = new NODE;
+	if(p == NULL){
+		printf("Khong du bo nho!\n");
+		return NULL;
+	}
+	p->sv =s;
+	p->next = NULL;
+	return p;
+}
+bool isEmpty(LIST ds){
+	if(ds.pHead == NULL) return 1;
+	return 0;
+}
+void chenDau(LIST &ds, NODE *p){
+	if(ds.pHead == NULL){
+		ds.pHead = ds.pTail = p;
+	}else{
+		p->next = ds.pHead;
+		ds.pHead = p;
+	}
+}
+void chenCuoi(LIST &ds, NODE *p){
+	if(ds.pHead == NULL){
+		ds.pHead = p;
+		ds.pTail = p;
+	}else{
+		ds.pTail->next = p;
+		ds.pTail = p;
+	}
+}
+void nhapSV(SinhVien &sv){
+	cout <<"Nhap ma sinh vien: ";
+	cin>> sv.maSV; getchar();
+	cout<<"Nhap ho ten: " ;
+	getline(cin, sv.tenSV);
+	cout<< "Nhap lop: ";
+	getline(cin, sv.lop);
+	cout<< "Nhap diem tong ket: ";
+	cin >> sv.diemTK;getchar();
+	cout<< "Nhap hanh kiem: ";
+	getline(cin, sv.hanhKiem);
+}
+void duyetDS(LIST ds){
+	for(NODE *p = ds.pHead ; p != NULL; p = p->next){
+		cout<< p->sv.maSV << " "<< p->sv.tenSV << " "<< p->sv.lop<< " "<<fixed << setprecision(2) << p->sv.diemTK << " "<< p->sv.hanhKiem<< "\n";
+	}
+}
+void timSV(LIST ds, int n){
+	int test =0;
+	for(NODE *p = ds.pHead; p!= NULL; p = p->next){
+		if("D13CNPM" == p->sv.lop){
+				cout<< p->sv.maSV << " "<< p->sv.tenSV << " "<< p->sv.lop<< " " <<
+					p->sv.diemTK << " "<< p->sv.hanhKiem<< "\n";
+				test = 1;	
+		}
+	}
+	if(test == 0) cout << "Khong co sinh vien lop D13CNPM\n";
+} 
+void xoaNodeCuoi(LIST &ds){
+	for(NODE *p = ds.pHead; p != NULL; p = p->next){
+		if(p->next == ds.pTail){
+			ds.pTail = p;
+			p->next = NULL;
+			break;
+		}
+	}
+}
+int main(){
+	LIST ds;
+	khoiTao(ds);
+	int n;
+	cout<<"Nhap so luong sinh vien:"; cin >> n; getchar();
+	for (int i=0;i<n;i++){
+		cout<<"Nhap sinh vien "<< i+1<< endl;
+		SinhVien sv;
+		nhapSV(sv);
+		chenCuoi(ds, taoNut(sv));
+	}
+	cout<<"Danh sach sinh vien:\n"; 
+	duyetDS(ds);
+	cout << "Danh sach sinh vien co ma lop 'D13CNPM':\n";
+	timSV(ds, n);
+	xoaNodeCuoi(ds);
+	cout<< "Danh sach sinh vien sau khi xoa NODE cuoi: \n";
+	duyetDS(ds);
+	return 0;
+}
+
+
+Bài 2 : Cấu trúc học viên( Danh sách liên kết đơn): 
+#include <bits\stdc++.h>
+
+using namespace std;
+
+struct HocVien {
+	int maHV;
+	string tenHV, lop, chuyenNganh;
+	float diemTK;
+};
+typedef struct HocVien HV;
+struct node{
+	HV data;
+	struct node *next;
+};
+typedef struct node NODE;
+
+struct List{
+	NODE *pHead;
+	NODE *pTail;
+};
+
+typedef struct List LIST;
+
+void khoiTao(LIST &l){
+	l.pHead = NULL;
+	l.pTail = NULL;
+}
+
+NODE *taoNode(HV hv){
+	NODE *p = new NODE ;
+	if ( p == NULL){
+		cout << "Khong du dung luong!!!\n";
+		return NULL;
+	}
+	p->data = hv;
+	p->next = NULL;
+	return p;
+}
+
+void chenCuoi(LIST &l, NODE *p){
+	if(l.pHead == NULL){
+		l.pHead = l.pTail = p;
+	}else{
+		l.pTail->next = p;
+		l.pTail = p;
+	}
+}
+void xuatHV(HV hv){
+	cout<< hv.maHV << " " << hv.tenHV << " " << hv.lop <<" "<< hv.chuyenNganh<< " "
+		<< fixed << setprecision(2) << hv.diemTK<< endl;
+}
+void duyetDS(LIST l){
+	for(NODE *k = l.pHead; k!= NULL; k= k->next){
+		xuatHV(k->data);
+	}
+}
+void nhapHV(HV &hv){
+	cout << "Nhap ma hoc vien: "; cin>> hv.maHV; getchar();
+	cout << "Nhap ten hoc vien: "; getline(cin, hv.tenHV);
+	cout << "Nhap lop: "; getline (cin, hv.lop);
+	cout << "Nhap chuyen nganh : "; getline(cin, hv.chuyenNganh);
+	cout << "Nhap diem tong ket: "; cin>> hv.diemTK; getchar();
+}
+void timHV(LIST l){
+	int test =0;
+	for(NODE *k = l.pHead ; k!= NULL; k = k->next){
+		if(k->data.chuyenNganh.compare("tmdt") == 0 && k->data.diemTK >= 8){
+			xuatHV(k->data);
+			test =1;
+		}
+	}
+	if(test == 0 ) cout << "khong co\n";
+}
+void swapHV(HV &hv1, HV &hv2){
+	HV hv= hv1;
+	hv1 = hv2;
+	hv2 = hv;
+}
+void sapXep(LIST &l){
+	for(NODE *k = l.pHead ; k!= NULL; k= k->next){
+		for(NODE *g= k->next ; g!= NULL; g = g->next){
+			if(k->data.tenHV > g->data.tenHV) swapHV(k->data, g->data);
+		}
+	}
+}
+int main(){
+	LIST l;
+	khoiTao(l);
+	int n;
+	cout<< "Nhap so luong hoc vien: "; cin>> n; getchar();
+	for(int i=0;i<n;i++){
+		HV hv;
+		cout<<"Nhap hoc vien thu "<< i+1<< endl;
+		nhapHV(hv);
+		chenCuoi(l, taoNode(hv));
+	}
+	cout<< "Danh sach hoc vien: \n";
+	duyetDS(l);
+	cout<< "Danh sach hoc vien tmdt co diem tong ket >= 8:\n";
+	timHV(l);
+	sapXep(l);
+	cout<< "Danh sach hoc vien sau khi sap xep theo ten : \n";
+	duyetDS(l);
+	return 0;
+}
+
+Bài 2 : Cấu trúc học viên( Danh sách liên kết đôi): 
+#include <bits\stdc++.h>
+
+using namespace std;
+
+struct HocVien{
+	int maHocVien;
+	char tenHocVien[30], lop[20], chuyenNganh[20];
+	float diemTK;
+	
+};
+struct DNode{
+	HocVien data;
+	DNode *next;
+	DNode *prev;
+};
+struct DList{
+	DNode *pHead;
+	DNode *pTail;
+};
+
+void khoiTao(DList &dl){
+	dl.pHead = NULL;
+	dl.pTail = NULL;
+}
+
+DNode *taoNode(HocVien hv){
+	DNode *p = new DNode;
+	if(p == NULL){
+		cout<< "\nKhong du bo nho";
+		return NULL;
+	}
+	p->next = NULL;
+	p->data = hv;
+	p->prev = NULL;
+	return p;
+}
+void chenCuoi(DList &dl, DNode *p){
+	if(dl.pHead == NULL){
+		dl.pHead = dl.pTail = p;
+	}else{
+		dl.pTail->next = p;
+		p->prev = dl.pTail;
+		dl.pTail = p;
+	}
+	
+}
+void xuatHV(HocVien hv){
+	cout<<hv.maHocVien << " "<< hv.tenHocVien<< " "<< hv.chuyenNganh <<" "<< hv.lop<< " "<< 
+			fixed<< setprecision(2)<< hv.diemTK<< endl;
+}
+void nhapHV(HocVien &hv){
+	cout<< "Nhap ma hoc vien:";
+	cin>> hv.maHocVien;
+	fflush(stdin);
+	cout<< "Nhap ten hoc vien: ";
+	gets(hv.tenHocVien);
+	cout<<"Nhap chuyen nhanh: ";
+	gets(hv.chuyenNganh);
+	cout<<"Nhap lop: ";
+	gets(hv.lop);
+	cout<<"Nhap diem tong ket: ";
+	cin>> hv.diemTK;
+}
+void duyetDS(DList dl){
+	for(DNode *p = dl.pHead; p!= NULL; p = p->next){
+		xuatHV(p->data);
+	}
+}
+void timHV(DList dl){
+	int test = 0;
+	for(DNode *p = dl.pHead; p!= NULL; p = p->next){
+		if(strcmp(p->data.chuyenNganh, "tmdt") == 0 && p->data.diemTK >= 8 ){
+			xuatHV(p->data);
+			test =1;
+		}
+	}
+	if(test == 0) cout <<"Khong co"<< endl;
+}
+void swap(HocVien &hv1, HocVien &hv2){
+	HocVien tmp= hv1;
+	hv1= hv2;
+	hv2 = tmp;
+}
+void sapXep(DList &dl){
+	for(DNode *p = dl.pHead; p!= NULL; p= p->next){
+		for(DNode *k = p->next ; k!= NULL; k= k->next)
+		if(strcmp(p->data.tenHocVien, k->data.tenHocVien) > 0) swap(p->data, k->data);
+	}
+}
+int main(){
+	DList dl;
+	khoiTao(dl);
+	int n;
+	cout<< "Nhap so hoc vien: "; cin>> n;
+	HocVien hv;
+	for(int i=0; i<n; i++){
+		cout<< "Nhap hoc vien thu "<< i+1 << ": \n";
+		nhapHV(hv);
+		DNode *p = taoNode(hv);
+		chenCuoi(dl, p);
+	}
+	cout <<  "Danh sach hoc vien : \n";
+	duyetDS(dl);
+	cout << "Danh sach hoc vien tmdt co diem tong ket >= 8.0: \n";
+	timHV(dl);
+	sapXep(dl);
+	cout <<  "Danh sach hoc vien sau sap xep : \n";
+	duyetDS(dl);
+	return 0;
+}
+Bài 3: Cấu trúc Hàng hóa(stack) :
+#include <bits\stdc++.h>
+
+using namespace std;
+
+struct date{
+	int ngay, thang, nam;
+};
+struct hang{
+	char ID[6];
+	char ten[26];
+	struct date ngay_xuat;
+	float gia_xuat;
+};
+
+struct Node{
+	hang data;
+	struct Node *next;
+};
+struct Stack{
+	Node *top;
+};
+
+void khoiTao(Stack &s){
+	s.top = NULL;
+}
+Node *taoNode(hang h){
+	Node *p = new Node;
+	if(p == NULL){
+		cout<< "Khong du bo nho"<< endl;
+		return NULL;
+	}
+	p->data = h;
+	p->next = NULL;
+	return p;
+}
+int isEmpty(Stack s){
+	if(s.top == NULL){
+		return 1;
+	}
+	return 0;
+}
+
+void push(Stack &s, hang h){
+	Node *p = taoNode(h);
+	if(p == NULL) return ;
+	if(isEmpty(s)){
+		s.top = p;
+	}else{
+		p->next = s.top;
+		s.top = p;
+	}
+}
+hang pop(Stack &s){
+	Node *p ;
+	hang h;
+	if(!isEmpty(s)){
+		p = s.top;
+		s.top = p->next;
+		h = p->data;
+		delete p;
+		return h;
+	}
+}
+void nhap(hang &h){
+	fflush(stdin);
+	cout<< "Nhap ma id: ";
+	gets(h.ID);
+	cout<< "Nhap ten : ";
+	gets(h.ten);
+	cout<< "Nhap ngay xuat: "<< endl;
+	cin >>h.ngay_xuat.ngay>> h.ngay_xuat.thang>> h.ngay_xuat.nam;
+	cout<< "Nhap gia xuat: ";
+	cin>> h.gia_xuat;
+}
+void xuat(hang h){
+	cout<< h.ID << " "<< h.ten<< " "<< h.ngay_xuat.ngay<<"/"<< h.ngay_xuat.thang<<"/"<<h.ngay_xuat.nam
+		<<" "<< fixed<< setprecision(2)<< h.gia_xuat<< endl; 
+}
+int main(){
+	Stack s;
+	khoiTao(s);
+	int n;
+	cout<< "Nhap n:"; cin>> n;
+	hang h;
+	for(int i=0; i<n ;i++){
+		cout<< "Nhap hang hoa thu"<< i+1<< ": "<< endl;
+		nhap(h);
+		push(s, h);
+	}
+	cout<< "Hang hoa co gia > 1.0 la: "<< endl;
+	while (!isEmpty(s)){
+		hang hangXuat = pop(s);
+		if(hangXuat.gia_xuat >1.0){
+			xuat(hangXuat);
+		}
+	}
+	return 0;
+}
+
+
+Bài 6: Cấu trúc khách hàng( Danh sách liên kết đôi)
+
+#include <bits\stdc++.h>
+
+using namespace std;
+
+struct KhachHang{
+	int maKhachHang;
+	char tenKhachHang[30], diaChi[20], soDienThoai[30];
+	int tongTien;
+};
+
+struct Node{
+	KhachHang data;
+	struct Node *next;
+	struct Node *prev;
+};
+
+struct List{
+	Node *phead;
+	Node *pTail;
+};
+void khoiTao(List &l){
+	l.phead = NULL;
+	l.pTail = NULL;
+}
+Node *taoNut(KhachHang kh){
+	Node *p = new Node;
+	if(p == NULL){
+		cout<< "Khong du bo nho"<< endl;
+		return NULL;
+	}
+	p->prev = NULL;
+	p->data = kh;
+	p->next = NULL;
+	return p;
+}
+void chenCuoi(List &l, Node *p){
+	if(l.phead == NULL){
+		l.phead = l.pTail = p;
+	}else{
+		l.pTail->next = p;
+		p->prev = l.pTail;
+		l.pTail = p;
+	}
+}
+void nhapKH(KhachHang &kh){
+	cout<< "Nhap ma khach hang: "; cin >> kh.maKhachHang;
+	fflush(stdin);
+	cout<< "Nhap ten khach hang: "; gets(kh.tenKhachHang);
+	cout<< "Nhap dia chi: "; gets(kh.diaChi);
+	cout<< "Nhap so dien thoai: "; gets(kh.soDienThoai);
+	cout<< "Nhap tong tien: "; cin>> kh.tongTien;
+	
+}
+void xuatKH(KhachHang kh){
+	cout<< kh.maKhachHang << " "<< kh.tenKhachHang<< " "<< kh.diaChi << " "
+		<< kh.soDienThoai << " "<< kh.tongTien << endl;
+}
+void duyetDS(List l){
+	for(Node *p = l.phead; p!= NULL; p= p->next){
+		xuatKH(p->data);
+	}
+}
+void timKiem(List l){
+	int test =0;
+	for(Node *p = l.phead; p!= NULL; p= p->next){
+		if(strcmp(p->data.diaChi, "Ha Noi") == 0){
+			xuatKH(p->data);
+			test =1;
+		}
+	}
+	if(test  == 0) cout<<"Khong co"<< endl;
+}
+void sapXep(List &l){
+	for(Node *p = l.phead; p!= NULL; p=p->next){
+		for(Node *k = p->next; k!= NULL; k= k->next){
+			if(p->data.tongTien < k->data.tongTien) swap(p->data, k->data);
+		}
+		
+	}
+}
+int main(){
+	List l;
+	khoiTao(l);
+	KhachHang kh;
+	int n;
+	cout<< "Nhap so luong khach hang: "; cin>> n;
+	for(int i=0; i<n; i++){
+		cout<< "Nhap khach hang thu "<< i+1<< ": "<< endl;
+		nhapKH(kh);
+		Node *p = taoNut(kh);
+		chenCuoi(l, p);
+	}
+	cout<<"Danh sach da nhap la: "<< endl;
+	duyetDS(l);
+	cout<<"Danh sach khach hang o ha noi: "<<endl;
+	timKiem(l);
+	sapXep(l);
+	cout<<"Danh sach sau khi sap xep giam dan: "<< endl;
+	duyetDS(l);
+	return 0;
+}
+

@@ -432,7 +432,116 @@ int main(){
 	}
 	return 0;
 }
+Bài 4: Cấu trúc hàng (Queue):
+#include <bits\stdc++.h>
 
+using namespace std;
+
+struct Date{
+	int ngay, thang, nam;
+};
+
+struct Hang{
+	char id[6], ten[256];
+	Date ngay_xuat;
+	float gia_xuat;
+};
+
+struct Node{
+	Hang data;
+	struct Node *next;
+};
+
+struct Queue{
+	Node *front, *rear;
+};
+
+void khoiTao(Queue &q){
+	q.front = q.rear= NULL;
+}
+
+Node *taoNode(Hang &h){
+	Node *p  = new Node;
+	if(p == NULL){
+		cout<< "Khong du bo nho"<< endl;
+		return NULL;
+	}
+	p->data = h;
+	p->next = NULL;
+	return p;
+}
+
+int isEmpty(Queue q){
+	if(q.front == NULL){
+		return 1;
+	}
+	return 0;
+}
+
+void add(Queue &q, Node *p){
+	if(isEmpty(q)){
+		q.front = q.rear =p;
+	}else{
+		q.rear->next = p;
+		q.rear = p;
+	}
+}
+Hang remove(Queue &q){
+	Hang x;
+	Node *p = NULL;
+	if(!isEmpty(q)){
+		p = q.front;
+		x = p->data;
+		q.front = q.front->next;
+		delete p;
+		if(q.front == NULL){
+			q.rear = NULL;
+		}
+		return x;
+		
+	}
+}
+void nhapH(Hang &h){
+	fflush(stdin);
+	cout<< "Nhap id: "; gets(h.id);
+	cout<< "Nhap ten: "; gets(h.ten);
+	cout<< "Nhap ngay xuat: ";
+	cin>> h.ngay_xuat.ngay>> h.ngay_xuat.thang>> h.ngay_xuat.nam;
+	cout<< "Nhap gia xuat: ";
+	cin>> h.gia_xuat;
+}
+void xuatH(Hang h){
+	cout<< h.id<< " "<< h.ten<< " "<< h.ngay_xuat.ngay<<"/"<< h.ngay_xuat.thang<<"/"
+		<<h.ngay_xuat.nam<<" "<<h.gia_xuat<< endl;
+}
+
+int main(){
+	Queue q, backUp;
+	khoiTao(q);
+	khoiTao(backUp);
+	int n;
+	Hang h;
+	cout<< "Nhap so luong hang: ";
+	cin>> n;
+	for(int i=0; i<n; i++){
+		cout<< "Nhap thong tin hang thu"<< i+1<< ": "<< endl;
+		nhapH(h);
+		add(q, taoNode(h));
+	}
+	cout<< "danh sach hang co ma 001: "<< endl;
+	while(!isEmpty(q)){
+		h = remove(q);
+		add(backUp, taoNode(h));
+		if(strcmp(h.id,"001") == 0){
+			xuatH(h);
+		}
+	}
+	cout<< "Thong tin hang hoa da boc xep: "<< endl;
+	while(!isEmpty(backUp)){
+		h= remove(backUp);
+		xuatH(h);
+	}
+}
 
 Bài 6: Cấu trúc khách hàng( Danh sách liên kết đôi)
 

@@ -70,9 +70,9 @@ Node *timNode(Tree root, int x){
 		if(root->data == a){
 			return root;
 		}else if(root->data > a){
-			return timNode(root->right, a);
-		}else{
 			return timNode(root->left, a);
+		}else{
+			return timNode(root->right, a);
 		}
 	}else{
 		return NULL;

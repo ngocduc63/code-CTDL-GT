@@ -1,0 +1,94 @@
+#include <bits\stdc++.h>
+
+using namespace std;
+struct Node{
+	int data;
+	struct Node *left;
+	struct Node *right;
+};
+
+typedef struct Node *Tree;
+
+Tree root;
+void init (Tree &root){
+	root = NULL;
+}
+
+Node *taoNode(int x){
+	Node *p = new Node;
+	if(p == NULL){
+		cout<< "Khong du bo nho"<< endl;
+		return NULL;
+	}
+	p->left = NULL;
+	p->right = NULL;
+	p->data = x;
+	return p;
+}
+int chenNode(Tree &root, Node *p){
+	if(root != NULL){
+		if(root->data == p->data){
+			return 0;
+		} 
+		if(root->data > p->data){
+			return chenNode(root->left, p);
+		}else{
+			return chenNode(root->right, p);
+		}
+	}else{
+		root = p;
+	}
+}
+int n;
+void taoTree(Tree &root){
+	cout<< "Nhap n: ";
+	cin >> n;
+	for(int i=0; i<n;i++){
+		int x;
+		cout<< "Nhap gia tri cua phan tu "<<i<< ": "<< endl;
+		cin>> x;
+		Node *p = taoNode(x); 
+		chenNode(root, p);
+	}
+}
+
+void NLR(Tree root){
+	
+	if(root != NULL){
+		cout<< " "<< root->data; 
+	}
+	if(root->left != NULL){
+		NLR(root->left);
+	}
+	if(root->right != NULL){
+		NLR(root->right);
+	}
+}
+Node *timNode(Tree root, int x){
+	if(root != NULL){
+		int a = x;
+		if(root->data == a){
+			return root;
+		}else if(root->data > a){
+			return timNode(root->right, a);
+		}else{
+			return timNode(root->left, a);
+		}
+	}else{
+		return NULL;
+	}
+}
+int main(){
+	init(root);
+	taoTree(root);
+	cout<< "Cay da tao(NLR): ";
+	NLR(root);
+	int x;
+	cout<<"\nNhap gia tri can tim: "; cin>> x;
+	if(timNode(root, x) == NULL){
+		cout<< "Khong tim thay!";
+	}else{
+		cout<< "Tim thay!";	
+	}
+	return 0;
+}

@@ -1,0 +1,159 @@
+#include <bits\stdc++.h>
+
+using namespace std;
+
+struct MatHang{
+	int maHang, namSanXuat;
+	char tenHang[30],loaiHang[20], xuatXu[20];
+	float giaBan;
+};
+
+struct DNode{
+	MatHang data;
+	struct DNode *prev;
+	struct DNode *next;
+};
+
+struct DList{
+	DNode *pHead;
+	DNode *pTail;
+};
+
+void khoiTao(DList &dl){
+	dl.pHead = NULL;
+	dl.pTail = NULL;
+}
+
+DNode *taoDNode(MatHang mh){
+	DNode *p= new DNode;
+	if (p == NULL){
+		cout<<"Khong du bo nho"<< endl;
+		return NULL;
+	}
+	p->prev = NULL;
+	p->data = mh;
+	p->next = NULL;
+	return p;
+}
+DNode *timKiem(DList dl, char xuatXu[30]){
+//	DNode *p = new DNode; 
+//	for(p= dl.pHead; p != NULL; p= p->next){
+//		if(strcmp(p->data.xuatXu, xuatXu) == 0) return p;
+//	}
+
+    DNode *p;
+    p = dl.pHead;
+    while ( (p!=NULL) && (strcmp(p->data.xuatXu, xuatXu) != 0) ){
+        p=p->next;
+    }
+    return p;
+} 
+void chenCuoi(DList &dl, DNode *p){
+	if(dl.pHead == NULL){
+		dl.pHead= dl.pTail= p;
+	}else{
+		dl.pTail->next=p;
+		p->prev = dl.pTail;
+		dl.pTail = p;
+	}
+}
+void nhapMH(MatHang &mh){
+	cout<< "Nhap ma hang: "; cin >> mh.maHang;
+	fflush(stdin);
+	cout<< "Nhap ten hang: "; gets(mh.tenHang);
+	cout<< "Nhap loai hang: "; gets(mh.loaiHang);
+	cout<< "Nhap nam san xuat: "; cin>> mh.namSanXuat;
+	fflush(stdin);
+	cout<<"Nhap xuat xu: "; gets(mh.xuatXu);
+	cout<<"Nhap gia ban: "; cin>> mh.giaBan;
+}
+
+void xuatMH(MatHang mh){
+	cout<<mh.maHang<< " "<< mh.tenHang<< " "<< mh.loaiHang<< " "<< mh.namSanXuat
+		<<" "<< mh.xuatXu<<" "<< fixed<< setprecision(2)<< mh.giaBan<<endl;
+}
+void duyetDS(DList dl){
+	for(DNode *p= dl.pHead; p!= NULL; p= p->next){
+		xuatMH(p->data);
+	}
+} 
+
+void timMH(DList dl){
+	int test =0;
+	for(DNode *p = dl.pHead; p!= NULL; p= p->next){
+		if(p->data.giaBan >= 500000 && p->data.giaBan <= 1000000){
+			xuatMH(p->data);
+			test =1;
+		}
+	}
+	if (test ==0) cout<< "Khong co!"<<endl;
+}
+
+void xoaDau(DList &dl){
+	
+	DNode *p = dl.pHead;
+	dl.pHead = dl.pHead->next;
+	dl.pHead->prev = NULL;
+	
+	if(dl.pHead == NULL){
+		dl.pTail = NULL;
+	}
+	
+	p->next = NULL;
+	delete p;	
+}
+void xoaCuoi(DList &dl){
+	
+	DNode *p = dl.pTail;
+	dl.pTail = dl.pTail->prev;
+	dl.pTail->next = NULL;
+	
+	if(dl.pTail == NULL) dl.pHead = NULL;
+	
+	p->prev = NULL;
+	delete p;
+}
+void xoaBatKi(DList &dl){
+	DNode *p = new DNode;
+	char xuatXu[30] = "Trung Quoc";
+	p = timKiem(dl,xuatXu);
+	if(p!= NULL){
+		if(p->prev == NULL){
+			xoaDau(dl);
+			return;
+		}
+		if(p->next == NULL){
+			xoaCuoi(dl);
+			return;
+		}else {
+			p->next->prev = p->prev;
+			p->prev->next = p->next;
+			p->prev = NULL;
+			p->next = NULL;
+		} 
+		delete p;
+	} 
+}
+int main(){
+	DList dl;
+	khoiTao(dl);
+	MatHang mh;
+	
+	int n;
+	cout<< "Nhap so luong mat hang: "; cin>> n;
+	for(int i=0; i<n; i++){
+		cout<< "Nhap mat hang thu "<< i+1<< ": "<<endl;
+		nhapMH(mh);
+		chenCuoi(dl, taoDNode(mh));
+	}
+	cout<< "Danh sach da nhap: "<< endl;
+	duyetDS(dl);
+	cout<< "Danh sach mat hang co gia tu 500000 den 1000000 la: "<< endl;
+	timMH(dl);
+	cout<< "Danh sah sau khi xoa mat hang xuat su Trung Quoc la: "<< endl;
+	for(int i=0; i<n; i++){
+		xoaBatKi(dl);
+	}
+	duyetDS(dl);
+
+}

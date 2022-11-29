@@ -1,0 +1,110 @@
+#include <bits\stdc++.h>
+using namespace std;
+ 
+struct DuAn{
+	int maDA;
+	char tenDA[30], quyMo[30];
+	float tongKinhPhi; 
+};
+struct Node{
+	DuAn data;
+	struct Node *next;
+};
+struct List{
+	Node *pHead;
+	Node *pTail;
+};
+void khoiTao(List &l){
+	l.pHead = l.pTail= NULL;
+}
+Node *taoNode(DuAn &da){
+	Node *p = new Node;
+	if(p!= NULL){
+		p->data = da;
+		p->next = NULL;
+		return p;
+	}
+}
+
+void chenDau(List &l, Node *p){
+	if(l.pHead == NULL){
+		l.pHead = l.pTail = p;
+	}else{
+		p->next =l.pHead;
+		l.pHead = p;
+	}
+}
+Node *timKiem(List l, int x){
+	for(Node *p= l.pHead; p!= NULL; p= p->next){
+		if(p->data.maDA == x) return p;
+	}
+}
+
+void nhapDA(DuAn &da){
+	cout<< "Nhap ma du an: ";
+	cin>> da.maDA;
+	cout<<"Nhap ten du an: ";
+	fflush(stdin);
+	gets(da.tenDA);
+	cout<<"Nhap quy mo du an: ";
+	gets(da.quyMo);
+	cout<< "Nhap tong kinh phi (don vi ty): ";
+	cin>> da.tongKinhPhi;
+}
+void xuatDA(DuAn &da){
+	cout<< da.maDA<< " "<< da.tenDA<< " "<< da.quyMo<< " "<< da.tongKinhPhi<< endl;
+}
+void duyetDS(List l){
+	for(Node *p = l.pHead; p!= NULL; p= p->next){
+		xuatDA(p->data);
+	}
+}
+void timDA(List l){
+	int test =0;
+	for(Node *p = l.pHead; p!= NULL; p= p->next){
+		if(p->data.tongKinhPhi>= 5000 && p->data.tongKinhPhi <= 10000 ){
+			xuatDA(p->data);
+			test =1;
+		}
+	}
+	if(test ==0) cout<< "Khong co !"<< endl;
+}
+void xoaDA(List &l){
+	int x;
+	cout<< "Nhap vao ma du an can tim: ";
+	cin>> x;
+	Node *p = timKiem(l,x);
+	if(p!= NULL){
+		cout<< "Da tim thay du an co ma "<< x<< endl;
+		for(Node *k = l.pHead; k!= NULL; k= k->next){
+			if(k->next == p){
+				k->next = p->next;
+				delete p;
+			}
+		}
+		cout<< "-----Danh sach sau khi xoa: "<< endl;
+		duyetDS(l);
+	}else{
+		cout<< "Khong tim thay du an co ma "<< x<< endl;
+	}
+}
+int main(){
+	List l;
+	khoiTao(l);
+	DuAn da;
+	int n;
+	cout<< "Nhap so luong du an: ";
+	cin>> n;
+	for(int i=0; i<n; i++){
+		cout<< "Nhap du an thu "<< i+1<< ": "<< endl;
+		nhapDA(da);
+		Node *p= taoNode(da);
+		chenDau(l, p);
+	}
+	cout<< "-----Danh sach du an da nhap:  "<< endl;
+	duyetDS(l);
+	cout<< "-----Danh sach du an co tong kinh phi tu 5000 den 10000 ty: "<< endl;
+	timDA(l);
+	xoaDA(l);
+}
+ 
